@@ -1,0 +1,69 @@
+<?php include("dbconnect.php");?>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Amaclone</title>
+	<link rel="stylesheet" type="text/css" href="assets/bootstrap-3.3.6-dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<style>
+			.div1 {
+    				background-color: lightgrey;
+				    width: 800px;
+				    border: 25px solid purple;
+				    padding: 25px;
+				    margin: 25px;
+				    margin-left:25%;
+				    margin-top:5%;
+			     }
+		</style>
+	<body>
+	 <div class="navbar navbar-default navbar-fixed-top" id="topnav">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.php" class="navbar-brand">Amaclone</a>
+			</div>
+
+			
+		</div>
+	</div>
+			<div class="div1" ><form method="post" action="addproduct.php"><table align="center" cellpadding=10>
+					
+					<tr><td>product_id</td><td><input type="number" name="product_id" disabled></td></tr>
+					<tr><td>product_cat</td><td><input type="text" name="product_cat" value="<?php echo $_GET['cat_id']; ?>"></td></tr>
+					<tr><td>product_title</td><td><input type="text" name="product_title"></td></tr>
+					<tr><td>product_price</td><td><input type="number" name="product_price"></td></tr>
+					<tr><td>qty</td><td><input type="number" name="qty"></td></tr>
+					<tr><td>product_desc</td><td><input type="text" name="product_desc"></td></tr>
+					<tr><td>product_image</td><td><input type="text" name="product_image"></td></tr>
+					<tr><td>product_keywords</td><td><input type="text" name="product_keywords"></td></tr>
+					<tr><td colspan=2 align="center"><input type="submit" name="submit"></td></tr>
+
+			</form ></table></div>	
+				<?php
+					if(isset($_POST["submit"]))
+					{
+						$product_id=$_POST["product_id"];
+						$product_cat=$_POST["product_cat"];
+						$product_title=$_POST["product_title"];
+						$product_price=$_POST["product_price"];
+						$qty=$_POST["qty"];
+						$product_desc=$_POST["product_desc"];
+						$product_image=$_POST["product_image"];
+						$product_keywords=$_POST["product_keywords"];
+						//$product_brand=$_POST["product_brand"];
+						$sql = "INSERT INTO products VALUES( NULL,'$product_cat','$product_title','$product_price',$qty,'$product_desc','$product_image','product_keywords')";
+						$result = mysqli_query($conn, $sql);
+						if($result!=1) {
+							echo "<center><div class='fail-msg'><a>Adding New book Failed, Please Try Again!</a></div></center>";
+						}
+						else{
+							echo "<center><div class='suc-msg'><a>book Added Successfully</a></div></center>";
+						}
+					}
+					?>
+
+
+	</body>
+</html>
+

@@ -1,0 +1,79 @@
+<?php
+if(!isset($_SESSION))
+    {
+session_start();
+}
+if(isset($_SESSION['admin_id']) && $_SESSION['admin_id'] != ''){
+require_once("config.php");
+if((isset($_POST['Name']))&&($_POST['Name']!='')){
+$iname=$_POST['Name'];
+$idistrict=$_POST['District'];
+$iplace=$_POST['Place'];
+$idate=$_POST['Date'];
+$idescription=$_POST['Description'];
+$ieid=$_SESSION['admin_id'];
+$iimage=$_FILES['fileToUpload']['name'];
+$target_dir = "../uploads/";
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+    // Check if image file is a actual image or fake image
+    if(isset($_POST["submit"])) {
+     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+       echo "File is an image - " . $check["mime"] . ".";
+   $uploadOk = 1;
+      } else {
+                echo '<script type="text/javascript">
+                        window.location.href="index.php";
+                        alert("File is not an image, Try Again");
+                    </script>';
+        $uploadOk = 0;
+          }
+    }
+    // Check if file already exists
+    if (file_exists($target_file)) {
+    echo '<script type="text/javascript">
+                        window.location.href="index.php";
+                        alert("File Already Exists, Try Again");
+                    </script>';
+    $uploadOk = 0;
+    }
+    // Allow certain file formats
+    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+        echo '<script type="text/javascript">
+                        window.location.href="index.php";
+                        alert("Sorry, only JPG, JPEG, PNG & GIF files are allowed, Try Again");
+                    </script>';
+    
+    $uploadOk = 0;
+    }
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        echo '<script type="text/javascript">
+                        window.location.href="index.php";
+                        alert("Sorry, your file was not uploaded, Try Again");
+                    </script>';
+    // if everything is ok, try to upload file
+        } else {
+      if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        } else {
+        echo '<script type="text/javascript">
+                        window.location.href="index.php";
+                        alert("Sorry, there was an error uploading your file, Try Again");
+                    </script>';
+        }
+        }
+$sql="INSERT INTO `blood_donation_camp`(`camp_name`, `camp_place`, `camp_district`, `camp_date`, `camp_image`, `camp_description`, `camp_eid`, `camp_status`) VALUES ('{$iname}','{$iplace}','{$idistrict}','{$idate}','{$iimage}','{$idescription}','{$ieid}','1')";
+    if ($conn->query($sql) === TRUE){
+   echo '<script language="javascript">
+         alert("Camp Registred successfully");
+         window.location.href="admin.php";
+        </script>';
+}
+else{
+echo '<script language="javascript">alert("Error in Registration");window.location.href = "newcamp.php";</script>';
+}
+}
+?>
